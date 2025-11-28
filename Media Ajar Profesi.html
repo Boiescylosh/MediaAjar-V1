@@ -134,11 +134,11 @@
       margin: 0 0 8px 0;
       text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-    /* REVISI 2: Kurangi margin bawah untuk HP */
+
     .landing-subtitle {
       font-size: 16px;
       color: #cbd5e1;
-      margin: 0 0 30px 0; /* DIREVISI: 50px -> 30px */
+      margin: 0 0 30px 0;
       font-weight: 600;
     }
     .btn-landing {
@@ -161,12 +161,11 @@
       display: flex;
       background: rgba(0,0,0,0.3);
       padding: 10px;
-      /* REVISI 1: Tambah padding horizontal di HP agar tidak menempel */
       padding-left: 15px; 
       padding-right: 15px; 
       overflow-x: auto;
       gap: 10px;
-      justify-content: flex-start; /* Ubah ke start agar bisa di-scroll */
+      justify-content: flex-start;
     }
     .nav-item {
       padding: 10px 20px;
@@ -215,10 +214,10 @@
       line-height: 1.6; font-size: 15px;
     }
 
-    /* --- KOSAKATA & PROFESI (Dimodifikasi untuk fix tampilan) --- */
+    /* --- KOSAKATA & PROFESI --- */
     .vocab-list { 
         display: grid; 
-        grid-template-columns: 1fr; /* Paksa 1 kolom di mobile untuk lebar penuh */
+        grid-template-columns: 1fr; 
         gap: 12px; 
     }
     .vocab-item {
@@ -262,7 +261,7 @@
       position: relative; 
       width: 100%;
       height: 0; 
-      padding-bottom: 177.78%; /* Rasio 9:16 (Tinggi 177.78% dari Lebar) */
+      padding-bottom: 177.78%; /* Rasio 9:16 (Tinggi 177.78%) */
       background-color: #334155; 
       background-size: cover; 
       background-position: center; 
@@ -301,10 +300,9 @@
       justify-content: flex-start; 
     }
     
-    /* REVISI 3a: Font size untuk item draggable agar lebih rapi di HP */
     .draggable-item span {
       font-weight:bold; 
-      font-size:13px; /* Turunkan dari 14px */
+      font-size:13px; 
     }
 
     .drop-zone {
@@ -317,8 +315,7 @@
       align-items: center; 
       justify-content: flex-end; 
       padding-right: 15px; 
-      /* REVISI 3b: Font size untuk drop zone agar lebih rapi di HP */
-      font-size: 16px; /* Turunkan dari 18px */
+      font-size: 16px; 
       line-height: 1.2;
       color: #fbbf24; 
       font-family: 'Traditional Arabic';
@@ -371,7 +368,7 @@
     }
     .input-group { 
         display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Kecilkan minmax untuk HP */
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
         gap: 15px; 
         margin-bottom: 20px; 
     }
@@ -578,7 +575,7 @@
 
   function initContent() {
     const vocabContainer = document.getElementById('vocab-container');
-    vocabContainer.innerHTML = ''; // Clear previous content
+    vocabContainer.innerHTML = ''; 
     dataProfesi.forEach(item => {
       vocabContainer.innerHTML += `
         <div class="vocab-item">
@@ -589,7 +586,7 @@
     });
 
     const galleryContainer = document.getElementById('gallery-container');
-    galleryContainer.innerHTML = ''; // Clear previous content
+    galleryContainer.innerHTML = ''; 
     dataProfesi.forEach(item => {
       galleryContainer.innerHTML += `
         <div class="card">
@@ -602,17 +599,17 @@
   }
   
   // ======================================================================
-  // FUNGSI GAME SAMBUNGKAN (Dengan penghitungan skor 10 per jawaban benar)
+  // FUNGSI GAME SAMBUNG KATA (Penghitungan skor 10 per jawaban benar)
   // ======================================================================
 
   function initGame() {
     const source = document.getElementById('drag-source');
     const target = document.getElementById('drop-target');
-    source.innerHTML = ''; // Clear previous content
-    target.innerHTML = ''; // Clear previous content
+    source.innerHTML = ''; 
+    target.innerHTML = ''; 
 
     let gameDataDraggable = [...dataProfesi]; 
-    gameDataDraggable.sort(() => Math.random() - 0.5); // Acak untuk sisi kiri
+    gameDataDraggable.sort(() => Math.random() - 0.5); 
 
     gameDataDraggable.forEach(item => {
       const div = document.createElement('div');
@@ -624,7 +621,7 @@
       
       div.innerHTML = `<div style="width: 40px; height: 40px; border-radius: 8px; background-image: url('${item.imageUrl}'); background-size: cover; background-position: center;"></div> <span>${item.indo.split('. ')[1]}</span>`;
       div.addEventListener('dragstart', (e) => {
-        // Hanya izinkan drag jika item belum disembunyikan
+    
         if (div.style.visibility !== 'hidden') {
             e.dataTransfer.setData("text", item.id);
         } else {
@@ -644,7 +641,9 @@
       
       zone.addEventListener('dragover', (e) => {
         e.preventDefault(); 
+        
         // Hanya tambahkan hover jika drop zone belum final (benar/salah)
+        
         if (!zone.classList.contains('correct-final') && !zone.classList.contains('wrong-final')) {
           zone.classList.add('hover');
         }
@@ -659,6 +658,7 @@
         zone.classList.remove('hover'); 
         
         // HENTIKAN DROP JIKA ZONA SUDAH DIISI
+        
         if (zone.classList.contains('correct-final') || zone.classList.contains('wrong-final')) {
             return; 
         }
@@ -667,23 +667,27 @@
         const draggedItem = document.getElementById('drag-'+draggedId);
         
         if (draggedId == item.id) {
+          
           // --- LOGIKA BENAR (Hijau Permanen) ---
+          
           zone.classList.add('correct-final');
           zone.innerHTML = item.arab; 
           if(draggedItem) draggedItem.style.visibility = 'hidden'; 
           checkGameCompletion();
           
         } else {
+          
           // --- LOGIKA SALAH (Merah Permanen + Item Hilang) ---
           
           zone.classList.add('wrong-final'); // Set warna merah permanen
           
           // Tampilkan teks Arab di drop zone, tetapi dengan warna merah (dari CSS)
+          
           zone.innerHTML = item.arab; 
           
           // Item yang salah ditarik tetap hilang permanen
-          if(draggedItem) draggedItem.style.visibility = 'hidden'; 
           
+          if(draggedItem) draggedItem.style.visibility = 'hidden'; 
           checkGameCompletion(); 
         }
       });
@@ -691,23 +695,23 @@
     });
   }
 
-
   function checkGameCompletion() {
       const dropZones = document.querySelectorAll('#drop-target .drop-zone');
       let allAnswered = true;
-      let score = 0; // Inisialisasi skor
-
+      let score = 0; 
+    
       dropZones.forEach(zone => {
           if (!zone.classList.contains('correct-final') && !zone.classList.contains('wrong-final')) {
               allAnswered = false;
           }
+        
           // Hitung skor: Jika zona memiliki kelas 'correct-final', tambahkan 10 poin
+        
           if (zone.classList.contains('correct-final')) {
               score += 10;
           }
       });
-
-      // Periksa semua draggable items, apakah semuanya sudah disembunyikan
+    
       const remainingItems = document.querySelectorAll('#drag-source .draggable-item');
       let allHidden = true;
       remainingItems.forEach(item => {
@@ -721,7 +725,9 @@
           let successMsg = document.getElementById('game-success-message');
           
           if (!successMsg) {
+            
               // Jika pesan belum ada, buat pesan baru
+            
               successMsg = document.createElement('p');
               successMsg.id = 'game-success-message';
               successMsg.style.cssText = 'text-align: center; font-weight: bold; margin-top: 20px; font-size: 18px; padding: 10px; border-radius: 10px;';
@@ -729,8 +735,11 @@
           }
           
           // Tentukan warna dan teks berdasarkan skor
+        
           let msgText = `GAME SELESAI! SKOR ANDA: ${score} / 100`;
+        
           // Warna: Hijau (100), Kuning (70-90), Merah (di bawah 70)
+        
           let msgColor = (score === 100) ? '#22c55e' : (score >= 70 ? '#fbbf24' : '#ef4444');
           let bgColor = (score === 100) ? 'rgba(34, 197, 94, 0.1)' : (score >= 70 ? 'rgba(251, 191, 36, 0.1)' : 'rgba(239, 68, 68, 0.1)');
 
@@ -749,6 +758,7 @@
     let totalScore = 0;
     
     // Kunci Jawaban (mengabaikan kapitalisasi dan spasi untuk jawaban ketik)
+    
     const answerKey = {
         q1: 'seniman',       // فَنَّانٌ = Seniman
         q2: 'dokter',        // طَبِيبٌ = Dokter
@@ -760,6 +770,7 @@
     };
 
     // Urutan semua kunci (termasuk q3, q4, q10 untuk loop)
+    
     const allQKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
 
     allQKeys.forEach((key) => {
@@ -771,18 +782,24 @@
         const inputValue = input.value || ''; 
         
         // --- LOGIKA PENILAIAN ---
+      
         if (key === 'q3' || key === 'q4' || key === 'q10') {
+          
             // Soal Esai/Opini (q3, q4, q10): Cukup benar jika terisi
+          
             if (inputValue.trim() !== '') {
                 isCorrect = true;
             }
         } else if (input.type === 'text') {
+          
             // Soal Ketik Kunci (q1, q2, q5, q6)
+          
             const userAnswer = inputValue.trim().toLowerCase();
             const correctAnswer = answerKey[key] ? answerKey[key].toLowerCase() : ''; 
             
             // Hapus karakter non-teks Arab/Latin untuk perbandingan bersih
             // Memungkinkan perbandingan antara 'dokter' dan 'dokter' atau 'طبيب' dan 'طبيب'
+          
             const cleanUserAnswer = userAnswer.replace(/[^a-z\u0621-\u064A\s]/g, '').trim(); 
             const cleanCorrectAnswer = correctAnswer.replace(/[^a-z\u0621-\u064A\s]/g, '').trim();
             
@@ -791,15 +808,17 @@
             }
 
         } else if (input.type === 'select-one') {
+          
             // Soal Pilihan Ganda (q7, q8, q9)
+          
             if (inputValue === answerKey[key]) {
                 isCorrect = true;
             }
         }
         
         // --- FEEDBACK VISUAL ---
+      
         if (input.type !== 'select-one' && input.type !== 'hidden') {
-            // Atur background feedback untuk input teks
             input.style.backgroundColor = isCorrect 
                 ? 'rgba(34, 197, 94, 0.2)' // Hijau
                 : (inputValue.trim() !== '' ? 'rgba(239, 68, 68, 0.2)' : '#ffffff'); // Merah atau Putih (jika kosong)
